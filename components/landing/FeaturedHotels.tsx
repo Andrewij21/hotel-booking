@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Star, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const hotels = [
   {
@@ -54,6 +55,20 @@ const hotels = [
 ];
 
 export function FeaturedHotels() {
+  const router = useRouter();
+
+  const handleHotelClick = (hotelId: number) => {
+    router.push(`/hotels/${hotelId}`);
+  };
+
+  const handleBookNow = (e: React.MouseEvent, hotelId: number) => {
+    e.stopPropagation();
+    router.push(`/hotels/${hotelId}`);
+  };
+
+  const handleViewAll = () => {
+    router.push("/hotels");
+  };
   return (
     <section id="hotels" className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -82,7 +97,10 @@ export function FeaturedHotels() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer bg-white py-0">
+              <Card
+                className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer bg-white py-0"
+                onClick={() => handleHotelClick(hotel.id)}
+              >
                 <div className="relative">
                   <img
                     // src={hotel.image || "/placeholder.svg"}
@@ -158,6 +176,7 @@ export function FeaturedHotels() {
                     <Button
                       size="sm"
                       className="bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                      onClick={(e) => handleBookNow(e, hotel.id)}
                     >
                       Book Now
                     </Button>
@@ -175,7 +194,12 @@ export function FeaturedHotels() {
           viewport={{ once: true }}
           className="text-center mt-12"
         >
-          <Button variant="outline" size="lg" className="px-8 bg-transparent">
+          <Button
+            variant="outline"
+            size="lg"
+            className="px-8 bg-transparent"
+            onClick={handleViewAll}
+          >
             View All Hotels
           </Button>
         </motion.div>
