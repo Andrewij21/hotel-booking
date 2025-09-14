@@ -50,7 +50,7 @@ const destinations = [
 
 export function DestinationsSection() {
   return (
-    <section id="destinations" className="py-20 bg-muted/30">
+    <section id="destinations" className="py-20">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ export function DestinationsSection() {
             viewport={{ once: true }}
             className="lg:col-span-2"
           >
-            <Card className="overflow-hidden h-full group cursor-pointer hover:shadow-xl transition-all duration-300">
+            <Card className="overflow-hidden h-full group cursor-pointer hover:shadow-xl transition-all duration-300 py-0">
               <div className="relative h-80 lg:h-full">
                 <img
                   src={destinations[0].image || "/placeholder.svg"}
