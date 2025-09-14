@@ -64,7 +64,7 @@ export function TestimonialsSection() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               viewport={{ once: true }}
             >
-              <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+              <Card className="h-full hover:shadow-lg transition-shadow duration-300 bg-background ">
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <Quote className="w-8 h-8 text-secondary mb-2" />
@@ -83,7 +83,7 @@ export function TestimonialsSection() {
                     ))}
                   </div>
 
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
+                  <p className="text-muted mb-6 leading-relaxed">
                     "{testimonial.text}"
                   </p>
 
@@ -104,7 +104,7 @@ export function TestimonialsSection() {
                       <div className="font-semibold text-foreground">
                         {testimonial.name}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-muted">
                         {testimonial.location}
                       </div>
                       <div className="text-xs text-secondary font-medium">
