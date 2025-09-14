@@ -82,7 +82,7 @@ export function FeaturedHotels() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer bg-white">
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer bg-white py-0">
                 <div className="relative">
                   <img
                     // src={hotel.image || "/placeholder.svg"}
