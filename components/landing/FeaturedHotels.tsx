@@ -82,7 +82,7 @@ export function FeaturedHotels() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer">
+              <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer bg-white">
                 <div className="relative">
                   <img
                     // src={hotel.image || "/placeholder.svg"}
@@ -108,7 +108,7 @@ export function FeaturedHotels() {
                     </h3>
                   </div>
 
-                  <div className="flex items-center text-muted-foreground text-sm mb-3">
+                  <div className="flex items-center text-sm mb-3 text-muted">
                     <MapPin className="w-4 h-4 mr-1" />
                     {hotel.location}
                   </div>
@@ -153,9 +153,7 @@ export function FeaturedHotels() {
                       <span className="text-2xl font-bold text-foreground">
                         ${hotel.price}
                       </span>
-                      <span className="text-muted-foreground text-sm">
-                        /night
-                      </span>
+                      <span className="text-muted text-sm">/night</span>
                     </div>
                     <Button
                       size="sm"
