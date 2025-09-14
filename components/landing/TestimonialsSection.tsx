@@ -128,19 +128,19 @@ export function TestimonialsSection() {
         >
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">50K+</div>
-            <div className="text-muted-foreground">Happy Guests</div>
+            <div className="text-muted">Happy Guests</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">500+</div>
-            <div className="text-muted-foreground">Luxury Hotels</div>
+            <div className="text-muted">Luxury Hotels</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">150+</div>
-            <div className="text-muted-foreground">Destinations</div>
+            <div className="text-muted">Destinations</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">4.9</div>
-            <div className="text-muted-foreground">Average Rating</div>
+            <div className="text-muted">Average Rating</div>
           </div>
         </motion.div>
       </div>
