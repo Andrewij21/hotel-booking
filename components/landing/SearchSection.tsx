@@ -22,11 +22,11 @@ export function SearchSection() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Card className="max-w-6xl mx-auto p-6 shadow-2xl border-0 bg-card">
+          <Card className="max-w-6xl mx-auto p-6 shadow-2xl border-2 bg-white text-black">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
               {/* Destination */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground flex items-center">
+                <label className="text-sm font-medium flex items-center">
                   <MapPin className="w-4 h-4 mr-1" />
                   Destination
                 </label>
@@ -34,13 +34,13 @@ export function SearchSection() {
                   placeholder="Where to?"
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
-                  className="h-12"
+                  className="h-12 placeholder:text-black"
                 />
               </div>
 
               {/* Check-in */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground flex items-center">
+                <label className="text-sm font-medium flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
                   Check-in
                 </label>
@@ -54,7 +54,7 @@ export function SearchSection() {
 
               {/* Check-out */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground flex items-center">
+                <label className="text-sm font-medium flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
                   Check-out
                 </label>
@@ -68,7 +68,7 @@ export function SearchSection() {
 
               {/* Guests & Search */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground flex items-center">
+                <label className="text-sm font-medium flex items-center">
                   <Users className="w-4 h-4 mr-1" />
                   Guests
                 </label>
