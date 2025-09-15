@@ -83,7 +83,7 @@ export function TestimonialsSection() {
                     ))}
                   </div>
 
-                  <p className="text-muted mb-6 leading-relaxed">
+                  <p className="text-muted-foreground mb-6 leading-relaxed">
                     "{testimonial.text}"
                   </p>
 
@@ -104,7 +104,7 @@ export function TestimonialsSection() {
                       <div className="font-semibold text-foreground">
                         {testimonial.name}
                       </div>
-                      <div className="text-sm text-muted">
+                      <div className="text-sm text-muted-foreground">
                         {testimonial.location}
                       </div>
                       <div className="text-xs text-secondary font-medium">
@@ -128,19 +128,19 @@ export function TestimonialsSection() {
         >
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">50K+</div>
-            <div className="text-muted">Happy Guests</div>
+            <div className="text-muted-foreground">Happy Guests</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">500+</div>
-            <div className="text-muted">Luxury Hotels</div>
+            <div className="text-muted-foreground">Luxury Hotels</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">150+</div>
-            <div className="text-muted">Destinations</div>
+            <div className="text-muted-foreground">Destinations</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-foreground mb-2">4.9</div>
-            <div className="text-muted">Average Rating</div>
+            <div className="text-muted-foreground">Average Rating</div>
           </div>
         </motion.div>
       </div>
