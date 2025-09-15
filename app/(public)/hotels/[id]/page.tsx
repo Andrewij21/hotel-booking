@@ -3,12 +3,21 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, MapPin, ArrowLeft } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Star, MapPin, ArrowLeft, Check, MapPinOff } from "lucide-react";
 import { motion } from "framer-motion";
 
 const hotels = [
+  // ... (Salin dan tempel data hotel Anda yang sudah ada di sini)
   {
     id: 1,
     name: "The Ocean Pearl Resort",
@@ -153,18 +162,44 @@ export default function HotelDetailPage() {
   );
 
   if (!hotel) {
-    return <div>Hotel not found</div>;
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-background text-center p-4">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+        >
+          <MapPinOff className="mx-auto h-24 w-24 text-muted-foreground/50 mb-6" />
+
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-3">
+            Hotel Not Found
+          </h1>
+
+          <p className="max-w-md text-lg text-muted-foreground mb-8">
+            We couldn't find the hotel you were looking for. It might have been
+            moved, or the URL is incorrect.
+          </p>
+
+          <Button
+            size="lg"
+            onClick={() => router.push("/hotels")}
+            variant={"ghost"}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to All Hotels
+          </Button>
+        </motion.div>
+      </div>
+    );
   }
 
   const handleBooking = () => {
-    // Check if user is logged in (simulate)
+    // ... (Your existing booking logic)
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
     if (!isLoggedIn) {
-      // Redirect to login
       router.push("/auth/login?redirect=/hotel/" + hotel.id);
     } else {
-      // Proceed with booking
       alert(
         `Booking confirmed for ${hotel.name}!\nRoom: ${hotel.rooms[selectedRoom].type}\nPrice: $${hotel.rooms[selectedRoom].price}/night`
       );
@@ -172,231 +207,226 @@ export default function HotelDetailPage() {
   };
 
   return (
-    <main className="min-h-screen">
-      <div className="pt-16">
-        {/* Back Button */}
-        <div className="container mx-auto px-4 py-6">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8 pt-24">
+        {/* Back Button and Hotel Title */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-6"
+        >
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="flex items-center space-x-2"
+            className="mb-4 text-muted"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Hotels</span>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Hotels
           </Button>
-        </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            {hotel.name}
+          </h1>
+          <div className="flex items-center text-muted mt-2 text-lg">
+            <MapPin className="w-5 h-5 mr-2" />
+            {hotel.location}
+          </div>
+        </motion.div>
 
-        {/* Hotel Images */}
-        <div className="container mx-auto px-4 mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-96">
-            <div className="lg:col-span-3">
+        {/* Image Gallery */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="grid grid-cols-4 grid-rows-2 gap-2 h-[500px] mb-12"
+        >
+          <div className="col-span-4 md:col-span-2 row-span-2 overflow-hidden rounded-lg">
+            <img
+              src={"https://placehold.co/800x800"}
+              alt={hotel.name}
+              className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          {hotel.images.slice(1, 3).map((image, index) => (
+            <div
+              key={index}
+              className="overflow-hidden rounded-lg col-span-2 md:col-span-1"
+            >
               <img
-                // src={hotel.images[selectedImage] || "/placeholder.svg"}
-                src={"https://placehold.co/600x400"}
-                alt={hotel.name}
-                className="w-full h-full object-cover rounded-lg cursor-pointer"
-                onClick={() =>
-                  setSelectedImage((selectedImage + 1) % hotel.images.length)
-                }
+                src={"https://placehold.co/400x400"}
+                alt={`${hotel.name} ${index + 2}`}
+                className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <div className="grid grid-cols-4 lg:grid-cols-1 gap-2">
-              {hotel.images.map((image, index) => (
-                <img
-                  key={index}
-                  //   src={image || "/placeholder.svg"}
-                  src={"https://placehold.co/600x400"}
-                  alt={`${hotel.name} ${index + 1}`}
-                  className={`w-full h-20 lg:h-24 object-cover rounded cursor-pointer transition-all ${
-                    selectedImage === index
-                      ? "ring-2 ring-secondary"
-                      : "hover:opacity-80"
-                  }`}
-                  onClick={() => setSelectedImage(index)}
-                />
-              ))}
-            </div>
+          ))}
+          <div className="overflow-hidden rounded-lg col-span-2 md:col-span-1 relative">
+            <img
+              src={"https://placehold.co/400x400"}
+              alt={`${hotel.name} 4`}
+              className="w-full h-full object-cover"
+            />
+            <Button className="absolute inset-0 w-full h-full bg-black/40 text-white text-lg hover:bg-black/60 transition-colors">
+              Show all photos
+            </Button>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Hotel Info */}
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-bold text-foreground mb-2">
-                      {hotel.name}
-                    </h1>
-                    <div className="flex items-center text-muted-foreground mb-2">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      {hotel.location}
-                    </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-4 h-4 ${
-                              i < Math.floor(hotel.rating)
-                                ? "text-yellow-400 fill-current"
-                                : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                        <span className="ml-2 font-medium">{hotel.rating}</span>
-                      </div>
-                      <span className="text-muted-foreground">
-                        ({hotel.reviews} reviews)
-                      </span>
-                      <Badge className="bg-secondary text-secondary-foreground">
-                        {hotel.badge}
-                      </Badge>
-                    </div>
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-12">
+          {/* Left Column: Details */}
+          <div className="lg:col-span-2">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              {/* Rating and Description */}
+              <div className="border-b pb-6 mb-6">
+                <div className="flex items-center space-x-4 mb-4">
+                  <Badge className="text-sm py-1 px-3">{hotel.badge}</Badge>
+                  <div className="flex items-center">
+                    <Star className="w-5 h-5 text-yellow-400 fill-current mr-2" />
+                    <span className="font-bold text-lg">{hotel.rating}</span>
+                    <span className="text-muted-foreground ml-2">
+                      ({hotel.reviews} reviews)
+                    </span>
                   </div>
                 </div>
-
-                <p className="text-muted-foreground mb-6 text-pretty">
+                <p className="text-muted text-lg leading-relaxed">
                   {hotel.description}
                 </p>
+              </div>
 
-                {/* Amenities */}
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold mb-4">Amenities</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {hotel.amenities.map((amenity) => (
-                      <div
-                        key={amenity}
-                        className="flex items-center space-x-2"
-                      >
-                        <div className="w-2 h-2 bg-secondary rounded-full"></div>
-                        <span className="text-sm">{amenity}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Room Types */}
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">Room Types</h3>
-                  <div className="space-y-4">
-                    {hotel.rooms.map((room, index) => (
-                      <Card
-                        key={index}
-                        className={`cursor-pointer transition-all ${
-                          selectedRoom === index
-                            ? "ring-2 ring-secondary"
-                            : "hover:shadow-md"
-                        }`}
-                        onClick={() => setSelectedRoom(index)}
-                      >
-                        <CardContent className="p-4">
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <h4 className="font-semibold">{room.type}</h4>
-                              <p className="text-sm text-muted-foreground">
-                                Up to {room.capacity} guests
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <span className="text-2xl font-bold">
-                                ${room.price}
-                              </span>
-                              <span className="text-muted-foreground">
-                                /night
-                              </span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Booking Card */}
-            <div className="lg:col-span-1">
-              <Card className="sticky top-24">
-                <CardContent className="p-6">
-                  <div className="mb-6">
-                    <div className="text-3xl font-bold text-foreground">
-                      ${hotel.rooms[selectedRoom].price}
-                      <span className="text-lg font-normal text-muted-foreground">
-                        /night
-                      </span>
+              {/* Amenities */}
+              <div className="border-b pb-6 mb-6">
+                <h3 className="text-2xl font-semibold mb-4">
+                  What this place offers
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {hotel.amenities.slice(0, 8).map((amenity) => (
+                    <div key={amenity} className="flex items-center">
+                      <Check className="w-5 h-5 mr-3 text-secondary" />
+                      <span>{amenity}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {hotel.rooms[selectedRoom].type}
-                    </p>
-                  </div>
+                  ))}
+                </div>
+              </div>
 
-                  <div className="space-y-4 mb-6">
+              {/* Room Types */}
+              <div>
+                <h3 className="text-2xl font-semibold mb-4">
+                  Choose your room
+                </h3>
+                <div className="space-y-4">
+                  {hotel.rooms.map((room, index) => (
+                    <Card
+                      key={index}
+                      className={`cursor-pointer transition-all duration-300 ${
+                        selectedRoom === index
+                          ? "ring-2 ring-secondary bg-secondary/10"
+                          : "hover:bg-card/80"
+                      }`}
+                      onClick={() => setSelectedRoom(index)}
+                    >
+                      <CardContent className="p-4 flex justify-between items-center">
+                        <div>
+                          <h4 className="font-semibold text-lg">{room.type}</h4>
+                          <p className="text-sm text-muted">
+                            Max capacity: {room.capacity} guests
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-xl font-bold">
+                            ${room.price}
+                          </span>
+                          <span className="text-muted text-sm">/night</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right Column: Booking Card */}
+          <div className="lg:col-span-1">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="sticky top-24"
+            >
+              <Card className="shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">
+                    <span className="font-bold">
+                      ${hotel.rooms[selectedRoom].price}
+                    </span>
+                    <span className="text-base font-normal text-muted">
+                      /night
+                    </span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="text-xs font-medium text-muted">
                         Check-in
                       </label>
-                      <input
+                      <Input
                         type="date"
                         value={checkIn}
                         onChange={(e) => setCheckIn(e.target.value)}
-                        className="w-full p-2 border rounded-md"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="text-xs font-medium text-muted">
                         Check-out
                       </label>
-                      <input
+                      <Input
                         type="date"
                         value={checkOut}
                         onChange={(e) => setCheckOut(e.target.value)}
-                        className="w-full p-2 border rounded-md"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Guests
-                      </label>
-                      <select
-                        value={guests}
-                        onChange={(e) =>
-                          setGuests(Number.parseInt(e.target.value))
-                        }
-                        className="w-full p-2 border rounded-md"
-                      >
+                  </div>
+                  <div>
+                    <label className="text-xs font-medium text-muted">
+                      Guests
+                    </label>
+                    <Select
+                      value={guests.toString()}
+                      onValueChange={(value) =>
+                        setGuests(Number.parseInt(value))
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select guests" />
+                      </SelectTrigger>
+                      <SelectContent>
                         {[...Array(hotel.rooms[selectedRoom].capacity)].map(
                           (_, i) => (
-                            <option key={i + 1} value={i + 1}>
+                            <SelectItem key={i + 1} value={(i + 1).toString()}>
                               {i + 1} Guest{i > 0 ? "s" : ""}
-                            </option>
+                            </SelectItem>
                           )
                         )}
-                      </select>
-                    </div>
+                      </SelectContent>
+                    </Select>
                   </div>
-
-                  <Button
-                    className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-                    onClick={handleBooking}
-                  >
-                    Book Now
+                  <Button size="lg" className="w-full" onClick={handleBooking}>
+                    Reserve
                   </Button>
-
-                  <p className="text-xs text-muted-foreground text-center mt-4">
+                  <p className="text-xs text-muted text-center">
                     You won't be charged yet
                   </p>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
