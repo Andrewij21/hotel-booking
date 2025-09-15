@@ -219,7 +219,7 @@ export default function HotelDetailPage() {
           <Button
             variant="ghost"
             onClick={() => router.back()}
-            className="mb-4 text-muted"
+            className="mb-4 text-muted-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Hotels
@@ -227,7 +227,7 @@ export default function HotelDetailPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             {hotel.name}
           </h1>
-          <div className="flex items-center text-muted mt-2 text-lg">
+          <div className="flex items-center text-muted-foreground mt-2 text-lg">
             <MapPin className="w-5 h-5 mr-2" />
             {hotel.location}
           </div>
@@ -292,7 +292,7 @@ export default function HotelDetailPage() {
                     </span>
                   </div>
                 </div>
-                <p className="text-muted text-lg leading-relaxed">
+                <p className="text-muted-foreground text-lg leading-relaxed">
                   {hotel.description}
                 </p>
               </div>
@@ -331,7 +331,7 @@ export default function HotelDetailPage() {
                       <CardContent className="p-4 flex justify-between items-center">
                         <div>
                           <h4 className="font-semibold text-lg">{room.type}</h4>
-                          <p className="text-sm text-muted">
+                          <p className="text-sm text-muted-foreground">
                             Max capacity: {room.capacity} guests
                           </p>
                         </div>
@@ -339,7 +339,9 @@ export default function HotelDetailPage() {
                           <span className="text-xl font-bold">
                             ${room.price}
                           </span>
-                          <span className="text-muted text-sm">/night</span>
+                          <span className="text-muted-foreground text-sm">
+                            /night
+                          </span>
                         </div>
                       </CardContent>
                     </Card>
@@ -363,7 +365,7 @@ export default function HotelDetailPage() {
                     <span className="font-bold">
                       ${hotel.rooms[selectedRoom].price}
                     </span>
-                    <span className="text-base font-normal text-muted">
+                    <span className="text-base font-normal text-muted-foreground">
                       /night
                     </span>
                   </CardTitle>
@@ -371,7 +373,7 @@ export default function HotelDetailPage() {
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-medium text-muted">
+                      <label className="text-xs font-medium text-muted-foreground">
                         Check-in
                       </label>
                       <Input
@@ -381,7 +383,7 @@ export default function HotelDetailPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-medium text-muted">
+                      <label className="text-xs font-medium text-muted-foreground">
                         Check-out
                       </label>
                       <Input
@@ -392,7 +394,7 @@ export default function HotelDetailPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-muted">
+                    <label className="text-xs font-medium text-muted-foreground">
                       Guests
                     </label>
                     <Select
@@ -418,7 +420,7 @@ export default function HotelDetailPage() {
                   <Button size="lg" className="w-full" onClick={handleBooking}>
                     Reserve
                   </Button>
-                  <p className="text-xs text-muted text-center">
+                  <p className="text-xs text-muted-foreground text-center">
                     You won't be charged yet
                   </p>
                 </CardContent>

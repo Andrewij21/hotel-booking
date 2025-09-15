@@ -126,7 +126,7 @@ export function FeaturedHotels() {
                     </h3>
                   </div>
 
-                  <div className="flex items-center text-sm mb-3 text-muted">
+                  <div className="flex items-center text-sm mb-3 text-muted-foreground">
                     <MapPin className="w-4 h-4 mr-1" />
                     {hotel.location}
                   </div>
@@ -171,7 +171,9 @@ export function FeaturedHotels() {
                       <span className="text-2xl font-bold text-foreground">
                         ${hotel.price}
                       </span>
-                      <span className="text-muted text-sm">/night</span>
+                      <span className="text-muted-foreground text-sm">
+                        /night
+                      </span>
                     </div>
                     <Button
                       size="sm"

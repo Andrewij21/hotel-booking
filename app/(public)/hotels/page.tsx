@@ -303,7 +303,7 @@ export default function HotelsPage() {
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
               All Hotels
             </h1>
-            <p className="text-lg text-muted">
+            <p className="text-lg text-muted-foreground">
               Discover amazing places to stay around the world
             </p>
           </motion.div>
@@ -311,12 +311,12 @@ export default function HotelsPage() {
           {/* Filters */}
           <div className="flex flex-col md:flex-row gap-4 mb-8 items-center">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
               <Input
                 placeholder="Search hotels or destinations..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full rounded-full py-6 pl-12 pr-6 placeholder:text-muted"
+                className="w-full rounded-full py-6 pl-12 pr-6 placeholder:text-muted-foreground"
               />
             </div>
             <Select value={sortBy} onValueChange={setSortBy}>
@@ -345,7 +345,7 @@ export default function HotelsPage() {
 
           {/* Results */}
           <div className="mb-4">
-            <p className="text-muted">
+            <p className="text-muted-foreground">
               Showing {visibleHotels.length} of {allHotels.length} hotels
             </p>
           </div>
@@ -385,7 +385,7 @@ export default function HotelsPage() {
                       {hotel.name}
                     </h3>
 
-                    <div className="flex items-center text-muted text-sm mb-3">
+                    <div className="flex items-center text-muted-foreground text-sm mb-3">
                       <MapPin className="w-4 h-4 mr-1" />
                       {hotel.location}
                     </div>
@@ -403,7 +403,7 @@ export default function HotelsPage() {
                           />
                         ))}
                       </div>
-                      <span className="text-sm text-muted ml-2">
+                      <span className="text-sm text-muted-foreground ml-2">
                         ({hotel.reviews} reviews)
                       </span>
                     </div>
@@ -425,7 +425,9 @@ export default function HotelsPage() {
                         <span className="text-2xl font-bold text-foreground">
                           ${hotel.price}
                         </span>
-                        <span className="text-muted text-sm">/night</span>
+                        <span className="text-muted-foreground text-sm">
+                          /night
+                        </span>
                       </div>
                       <Button
                         size="sm"
@@ -442,7 +444,7 @@ export default function HotelsPage() {
 
           {filteredHotels.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted text-lg">
+              <p className="text-muted-foreground text-lg">
                 No hotels found matching your criteria.
               </p>
               <Button
@@ -459,7 +461,7 @@ export default function HotelsPage() {
           )}
           {visibleCount < filteredHotels.length && (
             <div className="text-center py-10">
-              <p className="text-muted">Loading more hotels...</p>
+              <p className="text-muted-foreground">Loading more hotels...</p>
             </div>
           )}
 
