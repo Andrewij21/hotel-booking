@@ -1,6 +1,8 @@
+// app/hotel/[id]/page.tsx
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -13,11 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Star, MapPin, ArrowLeft, Check, MapPinOff } from "lucide-react";
+import { toast } from "sonner"; // FIX: Import toast for notifications
+import { Star, MapPin, ArrowLeft, Check, MapPinOff, X } from "lucide-react";
 import { motion } from "framer-motion";
 
+// FIX: Added one more hotel for variety
 const hotels = [
-  // ... (Salin dan tempel data hotel Anda yang sudah ada di sini)
   {
     id: 1,
     name: "The Ocean Pearl Resort",
@@ -26,10 +29,11 @@ const hotels = [
     reviews: 1247,
     price: 850,
     images: [
-      "/placeholder-a04m2.png",
-      "/placeholder-x0fjp.png",
-      "/luxury-hotel-room.png",
-      "/resort-restaurant.png",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
     ],
     amenities: [
       "Free WiFi",
@@ -58,10 +62,11 @@ const hotels = [
     reviews: 892,
     price: 650,
     images: [
-      "/placeholder-sjq5x.png",
-      "/placeholder-c654p.png",
-      "/placeholder-cky28.png",
-      "/placeholder-818g0.png",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
     ],
     amenities: [
       "Ski Access",
@@ -90,10 +95,11 @@ const hotels = [
     reviews: 2156,
     price: 420,
     images: [
-      "/placeholder-7elii.png",
-      "/modern-hotel-lobby.png",
-      "/placeholder-c3n19.png",
-      "/placeholder-rvp7p.png",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
     ],
     amenities: [
       "City View",
@@ -116,50 +122,76 @@ const hotels = [
   },
   {
     id: 4,
-    name: "Tropical Paradise Villa",
-    location: "Bali, Indonesia",
+    name: "Kyoto Serenity Garden",
+    location: "Kyoto, Japan",
     rating: 4.9,
-    reviews: 1543,
-    price: 380,
+    reviews: 987,
+    price: 550,
     images: [
-      "/placeholder-qr0cn.png",
-      "/placeholder-nt2pi.png",
-      "/placeholder-2xtrx.png",
-      "/placeholder-dmqut.png",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
+      "https://placehold.co/600x400",
     ],
     amenities: [
-      "Private Pool",
+      "Onsen (Hot Spring)",
+      "Zen Garden",
+      "Tea House",
+      "Free WiFi",
+      "Restaurant",
       "Spa",
-      "Garden",
-      "WiFi",
-      "Butler Service",
-      "Yoga Studio",
-      "Tropical Views",
-      "Kitchen",
+      "Concierge",
+      "Tatami Rooms",
     ],
-    badge: "Romantic",
+    badge: "Cultural Gem",
     description:
-      "Escape to your own private paradise in Bali. This exclusive villa features a private pool, lush tropical gardens, and personalized butler service for the ultimate romantic getaway.",
+      "Find tranquility at Kyoto Serenity Garden, a traditional Ryokan-style hotel. Experience authentic Japanese hospitality with serene gardens, a calming onsen, and beautifully designed tatami rooms.",
     rooms: [
-      { type: "Garden Villa", price: 380, capacity: 2 },
-      { type: "Pool Villa", price: 580, capacity: 4 },
-      { type: "Royal Villa", price: 980, capacity: 6 },
+      { type: "Garden View Tatami", price: 550, capacity: 2 },
+      { type: "Suite with Onsen", price: 850, capacity: 3 },
+      { type: "Imperial Suite", price: 1400, capacity: 5 },
     ],
   },
 ];
-
 export default function HotelDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [selectedImage, setSelectedImage] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(0);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState(2);
+  const [guests, setGuests] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0); // FIX: State for total price
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false); // FIX: State for gallery modal
 
   const hotel = hotels.find(
     (h) => h.id === Number.parseInt(params.id as string)
   );
+
+  // FIX: Calculate total price whenever dates or room selection change
+  useEffect(() => {
+    if (checkIn && checkOut) {
+      const startDate = new Date(checkIn);
+      const endDate = new Date(checkOut);
+      if (endDate > startDate) {
+        const timeDiff = endDate.getTime() - startDate.getTime();
+        const days = Math.ceil(timeDiff / (1000 * 3600 * 24));
+        setTotalPrice(days * hotel!.rooms[selectedRoom].price);
+      } else {
+        setTotalPrice(0); // Reset if dates are invalid
+      }
+    }
+  }, [checkIn, checkOut, selectedRoom, hotel]);
+
+  // FIX: Adjust guest count if the selected room has a lower capacity
+  useEffect(() => {
+    if (hotel) {
+      const maxCapacity = hotel.rooms[selectedRoom].capacity;
+      if (guests > maxCapacity) {
+        setGuests(maxCapacity);
+      }
+    }
+  }, [selectedRoom, hotel, guests]);
 
   if (!hotel) {
     return (
@@ -170,23 +202,15 @@ export default function HotelDetailPage() {
           transition={{ duration: 0.6, ease: "easeInOut" }}
         >
           <MapPinOff className="mx-auto h-24 w-24 text-muted-foreground/50 mb-6" />
-
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-3">
             Hotel Not Found
           </h1>
-
           <p className="max-w-md text-lg text-muted-foreground mb-8">
-            We couldn't find the hotel you were looking for. It might have been
-            moved, or the URL is incorrect.
+            We couldn't find the hotel you were looking for.
           </p>
-
-          <Button
-            size="lg"
-            onClick={() => router.push("/hotels")}
-            variant={"ghost"}
-          >
+          <Button size="lg" onClick={() => router.push("/")} variant={"ghost"}>
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to All Hotels
+            Back to Home
           </Button>
         </motion.div>
       </div>
@@ -194,17 +218,30 @@ export default function HotelDetailPage() {
   }
 
   const handleBooking = () => {
-    // ... (Your existing booking logic)
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    if (!checkIn || !checkOut) {
+      toast.error("Please select a check-in and check-out date.");
+      return;
+    }
+    if (new Date(checkOut) <= new Date(checkIn)) {
+      toast.error("Check-out date must be after the check-in date.");
+      return;
+    }
+
+    const isLoggedIn = true; // Replace with your actual auth check
 
     if (!isLoggedIn) {
       router.push("/auth/login?redirect=/hotel/" + hotel.id);
     } else {
-      alert(
-        `Booking confirmed for ${hotel.name}!\nRoom: ${hotel.rooms[selectedRoom].type}\nPrice: $${hotel.rooms[selectedRoom].price}/night`
-      );
+      // FIX: Use a toast notification instead of an alert
+      toast.success("Booking Confirmed!", {
+        description: `Your stay at ${hotel.name} in a ${hotel.rooms[selectedRoom].type} is confirmed.`,
+        duration: 5000,
+      });
     }
   };
+
+  // FIX: Get today's date for min attribute on date inputs
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <div className="min-h-screen bg-background">
@@ -222,7 +259,7 @@ export default function HotelDetailPage() {
             className="mb-4 text-muted-foreground"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Hotels
+            Back to results
           </Button>
           <h1 className="text-4xl md:text-5xl font-bold text-foreground">
             {hotel.name}
@@ -233,45 +270,53 @@ export default function HotelDetailPage() {
           </div>
         </motion.div>
 
-        {/* Image Gallery */}
+        {/* --- DYNAMIC IMAGE GALLERY (FIX) --- */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="grid grid-cols-4 grid-rows-2 gap-2 h-[500px] mb-12"
         >
-          <div className="col-span-4 md:col-span-2 row-span-2 overflow-hidden rounded-lg">
+          <div
+            className="col-span-4 md:col-span-2 row-span-2 overflow-hidden rounded-lg cursor-pointer"
+            onClick={() => setIsGalleryOpen(true)}
+          >
             <img
-              src={"https://placehold.co/800x800"}
+              // src={hotel.images[0]}
+              src={"https://placehold.co/600x400"}
               alt={hotel.name}
-              className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
-          {hotel.images.slice(1, 3).map((image, index) => (
+          {hotel.images.slice(1, 4).map((image, index) => (
             <div
               key={index}
-              className="overflow-hidden rounded-lg col-span-2 md:col-span-1"
+              className="overflow-hidden rounded-lg col-span-2 md:col-span-1 cursor-pointer"
+              onClick={() => setIsGalleryOpen(true)}
             >
               <img
-                src={"https://placehold.co/400x400"}
+                src={image}
                 alt={`${hotel.name} ${index + 2}`}
-                className="w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               />
             </div>
           ))}
           <div className="overflow-hidden rounded-lg col-span-2 md:col-span-1 relative">
             <img
-              src={"https://placehold.co/400x400"}
-              alt={`${hotel.name} 4`}
+              src={hotel.images[4] || hotel.images[0]}
+              alt={`${hotel.name} extra`}
               className="w-full h-full object-cover"
             />
-            <Button className="absolute inset-0 w-full h-full bg-black/40 text-white text-lg hover:bg-black/60 transition-colors">
+            <Button
+              onClick={() => setIsGalleryOpen(true)}
+              className="absolute inset-0 w-full h-full bg-black/40 text-white text-lg hover:bg-black/60 transition-colors"
+            >
               Show all photos
             </Button>
           </div>
         </motion.div>
 
-        {/* Main Content */}
+        {/* Main Content (Rest of the page is the same, with booking card updated below) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 xl:gap-12">
           {/* Left Column: Details */}
           <div className="lg:col-span-2">
@@ -280,7 +325,6 @@ export default function HotelDetailPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              {/* Rating and Description */}
               <div className="border-b pb-6 mb-6">
                 <div className="flex items-center space-x-4 mb-4">
                   <Badge className="text-sm py-1 px-3">{hotel.badge}</Badge>
@@ -297,13 +341,12 @@ export default function HotelDetailPage() {
                 </p>
               </div>
 
-              {/* Amenities */}
               <div className="border-b pb-6 mb-6">
                 <h3 className="text-2xl font-semibold mb-4">
                   What this place offers
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  {hotel.amenities.slice(0, 8).map((amenity) => (
+                  {hotel.amenities.map((amenity) => (
                     <div key={amenity} className="flex items-center">
                       <Check className="w-5 h-5 mr-3 text-secondary" />
                       <span>{amenity}</span>
@@ -312,7 +355,6 @@ export default function HotelDetailPage() {
                 </div>
               </div>
 
-              {/* Room Types */}
               <div>
                 <h3 className="text-2xl font-semibold mb-4">
                   Choose your room
@@ -351,7 +393,7 @@ export default function HotelDetailPage() {
             </motion.div>
           </div>
 
-          {/* Right Column: Booking Card */}
+          {/* --- UPDATED BOOKING CARD (FIX) --- */}
           <div className="lg:col-span-1">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -380,6 +422,7 @@ export default function HotelDetailPage() {
                         type="date"
                         value={checkIn}
                         onChange={(e) => setCheckIn(e.target.value)}
+                        min={today}
                       />
                     </div>
                     <div>
@@ -390,6 +433,7 @@ export default function HotelDetailPage() {
                         type="date"
                         value={checkOut}
                         onChange={(e) => setCheckOut(e.target.value)}
+                        min={checkIn || today}
                       />
                     </div>
                   </div>
@@ -417,6 +461,31 @@ export default function HotelDetailPage() {
                       </SelectContent>
                     </Select>
                   </div>
+
+                  {/* Total price calculation */}
+                  {totalPrice > 0 && (
+                    <div className="pt-2 border-t">
+                      <div className="flex justify-between text-muted-foreground">
+                        <span>
+                          ${hotel.rooms[selectedRoom].price} x{" "}
+                          {Math.ceil(
+                            Math.abs(
+                              new Date(checkOut).getTime() -
+                                new Date(checkIn).getTime()
+                            ) /
+                              (1000 * 3600 * 24)
+                          )}{" "}
+                          nights
+                        </span>
+                        <span>${totalPrice}</span>
+                      </div>
+                      <div className="flex justify-between font-bold text-lg mt-2">
+                        <span>Total</span>
+                        <span>${totalPrice}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <Button size="lg" className="w-full" onClick={handleBooking}>
                     Reserve
                   </Button>
@@ -429,6 +498,39 @@ export default function HotelDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* --- GALLERY MODAL (FIX) --- */}
+      {isGalleryOpen && (
+        <div
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setIsGalleryOpen(false)}
+        >
+          <div
+            className="relative bg-background rounded-lg p-4 max-w-5xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 z-10"
+              onClick={() => setIsGalleryOpen(false)}
+            >
+              <X className="h-6 w-6" />
+            </Button>
+            <h2 className="text-2xl font-bold mb-4">Photos of {hotel.name}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {hotel.images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`${hotel.name} view ${index + 1}`}
+                  className="w-full h-auto object-cover rounded-md"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
