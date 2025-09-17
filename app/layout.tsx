@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "LuxeStay - Premium Hotel Booking",
@@ -28,6 +29,7 @@ export default function RootLayout({
           <AuthProvider>
             <Suspense fallback={null}>
               {children}
+              <Toaster position="top-right" richColors />
               <Analytics />
             </Suspense>
           </AuthProvider>
