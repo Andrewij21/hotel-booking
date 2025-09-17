@@ -95,8 +95,8 @@ export default function DestinationsPage() {
                     alt={destination.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm font-medium">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="absolute top-4 right-4 bg-black/90 backdrop-blur-sm rounded-full px-3 py-1 text-white text-sm font-medium border border-white/20">
                     <Star className="w-4 h-4 inline mr-1 fill-yellow-400 text-yellow-400" />
                     {destination.rating}
                   </div>
