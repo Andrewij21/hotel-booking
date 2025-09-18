@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, Star } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function HeroSection() {
   return (
@@ -71,10 +72,13 @@ export function HeroSection() {
           >
             <Button
               size="lg"
+              asChild
               className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-3 text-lg group"
             >
-              Explore Hotels
-              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <Link href={"#hotels"}>
+                Explore Hotels
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
             <Button
               variant="outline"

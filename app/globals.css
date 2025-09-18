@@ -2,7 +2,9 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
+html {
+  scroll-behavior: smooth;
+}
 :root {
   /* Updated color palette for admin dashboard */
   --background: #ffffff;
