@@ -1,21 +1,27 @@
 "use client";
 
 import { useEffect } from "react";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Menu, X, MapPin } from "lucide-react";
+import { Menu, X, MapPin, User, History } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+    if (loggedIn) {
+      const email = localStorage.getItem("userEmail") || "";
+      const name = email.split("@")[0] || "User";
+      setUserName(name.charAt(0).toUpperCase() + name.slice(1));
+    }
   }, []);
 
   const handleSignIn = () => {
@@ -23,13 +29,18 @@ export function Header() {
       localStorage.removeItem("isLoggedIn");
       localStorage.removeItem("userEmail");
       setIsLoggedIn(false);
+      setUserName("");
     } else {
       router.push("/login");
     }
   };
 
-  const handleBookNow = () => {
-    router.push("/#hotels");
+  const handleReserveHistory = () => {
+    router.push("/reservations");
+  };
+
+  const handleUserProfile = () => {
+    router.push("/profile");
   };
 
   return (
@@ -80,19 +91,43 @@ export function Header() {
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              className="text-foreground hover:text-primary-foreground"
-              onClick={handleSignIn}
-            >
-              {isLoggedIn ? "Sign Out" : "Sign In"}
-            </Button>
-            <Button
-              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-              onClick={handleBookNow}
-            >
-              Book Now
-            </Button>
+            {isLoggedIn ? (
+              <>
+                <Button
+                  variant="ghost"
+                  className="text-foreground hover:text-secondary-foreground flex items-center space-x-2"
+                  onClick={handleUserProfile}
+                >
+                  <User className="w-4 h-4" />
+                  <span>{userName}</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="text-foreground hover:text-secondary-foreground flex items-center space-x-2"
+                  onClick={handleReserveHistory}
+                >
+                  <History className="w-4 h-4" />
+                  <span>Reserve History</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  className="text-foreground hover:text-secondary-foreground"
+                  onClick={handleSignIn}
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="ghost"
+                  className="text-foreground hover:text-secondary-foreground"
+                  onClick={handleSignIn}
+                >
+                  Sign In
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -145,19 +180,50 @@ export function Header() {
                   Contact
                 </Link>
                 <div className="pt-4 space-y-2">
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-foreground hover:text-secondary"
-                    onClick={handleSignIn}
-                  >
-                    {isLoggedIn ? "Sign Out" : "Sign In"}
-                  </Button>
-                  <Button
-                    className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground"
-                    onClick={handleBookNow}
-                  >
-                    Book Now
-                  </Button>
+                  {isLoggedIn ? (
+                    <>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-foreground hover:text-secondary flex items-center space-x-2"
+                        onClick={handleUserProfile}
+                      >
+                        <User className="w-4 h-4" />
+                        <span>{userName}</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-foreground hover:text-secondary flex items-center space-x-2"
+                        onClick={handleReserveHistory}
+                      >
+                        <History className="w-4 h-4" />
+                        <span>Reserve History</span>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-foreground hover:text-secondary"
+                        onClick={handleSignIn}
+                      >
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-foreground hover:text-secondary"
+                        onClick={handleSignIn}
+                      >
+                        Sign In
+                      </Button>
+                      <Button
+                        className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground flex items-center justify-center space-x-2"
+                        onClick={handleReserveHistory}
+                      >
+                        <History className="w-4 h-4" />
+                        <span>Reserve History</span>
+                      </Button>
+                    </>
+                  )}
                 </div>
               </nav>
             </motion.div>
