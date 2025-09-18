@@ -1,17 +1,41 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Import the router
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Calendar, MapPin, Users, Search } from "lucide-react";
 import { motion } from "framer-motion";
+import { toast } from "sonner"; // Optional: for user feedback
 
 export function SearchSection() {
   const [destination, setDestination] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState("2");
+
+  const router = useRouter(); // Initialize the router
+
+  // Function to handle the search click
+  const handleSearch = () => {
+    // Basic validation
+    if (!destination.trim()) {
+      // Using toast for better UX, but an alert would also work
+      toast.error("Please enter a destination to search.");
+      return;
+    }
+
+    // Create a URLSearchParams object to build the query string
+    const params = new URLSearchParams();
+    params.append("destination", destination);
+    if (checkIn) params.append("checkIn", checkIn);
+    if (checkOut) params.append("checkOut", checkOut);
+    params.append("guests", guests);
+
+    // Navigate to the hotels page with the query parameters
+    router.push(`/hotels?${params.toString()}`);
+  };
 
   return (
     <section className="py-16 bg-background relative -mt-20 z-20">
@@ -84,6 +108,7 @@ export function SearchSection() {
                   <Button
                     size="lg"
                     className="h-12 px-6 bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                    onClick={handleSearch} // Add the onClick handler here
                   >
                     <Search className="w-5 h-5" />
                   </Button>
